@@ -1,0 +1,17 @@
+#This configuration file controls the behavior of busybody.py and tellteam.py
+#The two definitions can be comma-delimited lists of email addresses.
+#Be sure these addresses will accept mail from the tracker's email address.
+[main]
+triage_email =  triage@example.com
+busybody_email= busybody@example.com
+
+# URI to XMLRPC server doing the actual spam check.
+spambayes_uri = http://www.webfast.com:80/sbrpc
+# These must match the {ham,spam}_cutoff setting in the SpamBayes server
+# config.
+spambayes_ham_cutoff = 0.2
+spambayes_spam_cutoff = 0.85
+
+spambayes_may_view_spam = User,Coordinator,Developer
+spambayes_may_classify = Coordinator
+spambayes_may_report_misclassified = User,Coordinator,Developer

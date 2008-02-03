@@ -1,0 +1,5 @@
+Name: python-tracker
+Description: This is customisation of the "classic" tracker for the Python
+             Language developers.
+Intended-For: http://dev.python.org/
+
