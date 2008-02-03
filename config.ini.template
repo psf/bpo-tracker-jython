@@ -115,7 +115,7 @@ name = Tracker
 # Default: NO DEFAULT
 #web = NO DEFAULT
 #web = http://psf.upfronthosting.co.za/roundup/tracker/
-web = http://localhost:9999/python-dev/
+web = http://localhost:9999/jython/
 
 # Email address that mail to roundup should go to.
 # Default: issue_tracker
@@ -160,7 +160,7 @@ debug = no
 
 # Name of the database to use.
 # Default: roundup
-name = roundup
+name = roundup_jython
 
 # Database server host.
 # Default: localhost
