@@ -68,7 +68,8 @@ resolution.create(name='wont fix', order='10')
 resolution.create(name='works for me', order='11')
 
 keyword = db.getclass("keyword")
-#keyword.create(name="patch", description="Contains patch")
+# The patch keyword is needed by the importer
+keyword.create(name="patch", description="Contains patch")
 
 #
 # create the two default users
@@ -77,5 +78,5 @@ user.create(username="admin", password=adminpw, address=admin_email, roles='Admi
 user.create(username="anonymous", roles='Anonymous')
 
 # and some test users
-user.create(username="user", password="user", roles="User")
-user.create(username="developer", password="developer", roles="User,Developer")
+user.create(username="user", password=Password("user"), roles="User")
+user.create(username="developer", password=Password("developer"), roles="User,Developer")
