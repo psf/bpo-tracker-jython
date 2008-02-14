@@ -33,7 +33,6 @@ version.create(name='targeted for 2.2beta2', order='9')
 version.create(name='targeted for 2.2rc1', order='10')
 version.create(name='targeted for 2.2rc2', order='11')
 version.create(name='targeted for 2.2rc3', order='12')
-version.create(name='test failure causes', order='13')
 
 severity = db.getclass('severity')
 severity.create(name='critical', order='1')
@@ -70,6 +69,8 @@ resolution.create(name='works for me', order='11')
 keyword = db.getclass("keyword")
 # The patch keyword is needed by the importer
 keyword.create(name="patch", description="Contains patch")
+# This is mapped from a group
+keyword.create(name='test failure causes')
 
 #
 # create the two default users
