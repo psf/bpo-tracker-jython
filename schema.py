@@ -168,7 +168,7 @@ class may_view_spam:
 
         try:
             score = klass.get(itemid, 'spambayes_score')
-        except KeyError:
+        except (KeyError, IndexError):
             return True
 
         if score > cutoff_score:
