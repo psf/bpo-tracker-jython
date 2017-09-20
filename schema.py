@@ -63,7 +63,7 @@ keyword = Class(db, "keyword",
                 name=String(),
                 description=String())
 keyword.setkey("name")
-                
+
 
 # User-defined saved searches
 query = Class(db, "query",
@@ -180,8 +180,8 @@ def may_view_spam(cl):
 
 for cl in ('file', 'msg'):
     p = db.security.addPermission(name='View', klass=cl,
-                                  description="allowed to see metadata object regardless of spam status",
-                                  properties=('creation', 'activity',
+                                  description="allowed to see object metadata regardless of spam status",
+                                  properties=('id', 'creation', 'activity',
                                               'creator', 'actor',
                                               'name', 'spambayes_score',
                                               'spambayes_misclassified',
@@ -199,9 +199,9 @@ for cl in ('file', 'msg'):
     p = db.security.addPermission(name='View', klass=cl,
                                   description="Allowed to see content of object regardless of spam status",
                                   properties = ('content', 'summary'))
-    
-    db.security.addPermissionToRole('User', p)        
-    
+
+    db.security.addPermissionToRole('User', p)
+
     spamcheck = db.security.addPermission(name='View', klass=cl,
                                           description="allowed to see content if not spam",
                                           properties=('content', 'summary'),
@@ -209,7 +209,7 @@ for cl in ('file', 'msg'):
 
     db.security.addPermissionToRole('Anonymous', spamcheck)
 
-    
+
 def may_edit_file(db, userid, itemid):
     return userid == db.file.get(itemid, "creator")
 p = db.security.addPermission(name='Edit', klass='file', check=may_edit_file,
@@ -289,7 +289,7 @@ p = db.security.addPermission(name='Edit', klass='user', check=own_record,
                 'phone', 'organisation',
                 'alternate_addresses',
                 'queries',
-                'timezone')) # Note: 'roles' excluded - users should not be able to edit their own roles. 
+                'timezone')) # Note: 'roles' excluded - users should not be able to edit their own roles.
 for r in 'User', 'Developer':
     db.security.addPermissionToRole(r, p)
 
