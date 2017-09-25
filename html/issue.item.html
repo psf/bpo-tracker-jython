@@ -118,8 +118,8 @@
         tal:attributes="href string:issue${sup/id}; title sup/title;"></a> -->
    <br><span i18n:translate="">View</span>:
      <a tal:content="context/superseder/id"
-        tal:attributes="href string:issue${context/superseder/id}; title context/superseder/title;"></a> 
-  </span> 
+        tal:attributes="href string:issue${context/superseder/id}; title context/superseder/title;"></a>
+  </span>
  </td>
  </tr>
  <tr>
@@ -128,7 +128,7 @@
   <select name="assignee">
    <option value="-1">nobody</option>
    <tal:block tal:repeat="userdata python:db._db.user.filter_sql('select id,_username from _user where _roles like \'%Developer%\' order by _username')">
-    <option tal:attributes="value python:userdata[0]; 
+    <option tal:attributes="value python:userdata[0];
                             selected python:str(userdata[0]) == context.assignee._value"
             tal:content="python:userdata[1]"></option>
    </tal:block>
@@ -238,7 +238,7 @@
   <tr>
    <th><a tal:attributes="href string:msg${msg/id}"
     i18n:translate="">msg<tal:x replace="msg/id" i18n:name="id" /> (view)</a></th>
-   <th i18n:translate="">Author: <tal:x replace="python:msg.author.realname.plain(unchecked=1)"
+   <th i18n:translate="">Author: <tal:x replace="msg/author/realname"
        i18n:name="author" /> (<tal:x replace="msg/author"/>)</th>
    <th i18n:translate="">Date: <tal:x replace="msg/date"
        i18n:name="date" /></th>
