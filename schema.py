@@ -30,6 +30,13 @@ version = Class(db, 'version',
                 order=Number())
 version.setkey('name')
 
+# Milestone
+milestone = Class(db, 'milestone',
+                name=String(),
+                description=String(),
+                order=Number())
+version.setkey('name')
+
 # Severity
 severity = Class(db, 'severity',
                  name=String(),
@@ -126,7 +133,9 @@ issue = IssueClass(db, "issue",
                    status=Link('status'),
                    resolution=Link('resolution'),
                    superseder=Link('issue'),
-                   keywords=Multilink("keyword"))
+                   keywords=Multilink("keyword"),
+                   milestone=Link('milestone'),
+                   )
 
 #
 # TRACKER SECURITY SETTINGS
@@ -154,7 +163,7 @@ for r in 'User', 'Developer', 'Coordinator':
 
 for cl in ('issue_type', 'severity', 'component',
            'version', 'priority', 'status', 'resolution',
-           'issue', 'keyword'):
+           'issue', 'keyword', 'milestone'):
     db.security.addPermissionToRole('User', 'View', cl)
     db.security.addPermissionToRole('Anonymous', 'View', cl)
 
@@ -219,7 +228,7 @@ db.security.addPermissionToRole('User', p)
 p = db.security.addPermission(name='Create', klass='issue',
                               properties=('title', 'type',
                                           'components', 'versions',
-                                          'severity',
+                                          'severity', 'milestone',
                                           'messages', 'files', 'nosy'),
                               description='User can report and discuss issues')
 db.security.addPermissionToRole('User', p)
@@ -227,7 +236,7 @@ db.security.addPermissionToRole('User', p)
 p = db.security.addPermission(name='Edit', klass='issue',
                               properties=('title', 'type',
                                           'components', 'versions',
-                                          'severity',
+                                          'severity', 'milestone',
                                           'messages', 'files', 'nosy'),
                               description='User can report and discuss issues')
 db.security.addPermissionToRole('User', p)
@@ -241,7 +250,7 @@ db.security.addPermissionToRole('User', 'SB: May Report Misclassified')
 ##########################
 for cl in ('issue_type', 'severity', 'component',
            'version', 'priority', 'status', 'resolution',
-           'issue', 'file', 'msg', 'keyword'):
+           'issue', 'file', 'msg', 'keyword', 'milestone'):
     db.security.addPermissionToRole('Developer', 'View', cl)
 
 for cl in ('issue', 'file', 'msg', 'keyword'):
@@ -252,7 +261,7 @@ for cl in ('issue', 'file', 'msg', 'keyword'):
 ##########################
 # Coordinator permissions
 ##########################
-for cl in ('issue_type', 'severity', 'component',
+for cl in ('issue_type', 'severity', 'component', 'milestone',
            'version', 'priority', 'status', 'resolution', 'issue', 'file', 'msg'):
     db.security.addPermissionToRole('Coordinator', 'View', cl)
     db.security.addPermissionToRole('Coordinator', 'Edit', cl)

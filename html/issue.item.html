@@ -78,6 +78,17 @@
  </th>
  <td tal:content="structure context/versions/menu">versions</td>
 </tr>
+
+<tr>
+ <th>
+ </th>
+ <td></td>
+ <th i18n:translate="">
+   <span tal:replace="structure python:db.milestone.classhelp('id,name,description',label='Milestone')" />:
+ </th>
+ <td tal:content="structure context/milestone/menu">milestone</td>
+</tr>
+
 </table>
 </fieldset>
 
