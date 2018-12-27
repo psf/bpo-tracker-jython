@@ -1,0 +1,138 @@
+diff -r bbee7515875a html/issue.index.html
+--- a/html/issue.index.html	Thu Sep 28 03:56:57 2017 +0300
++++ b/html/issue.index.html	Fri Dec 21 17:26:56 2018 +0100
+@@ -31,6 +31,7 @@
+    <th tal:condition="request/show/title" i18n:translate="">Title</th>
+    <th tal:condition="request/show/components"  i18n:translate="">Components</th>
+    <th tal:condition="request/show/versions" i18n:translate="">Versions</th>
++   <th tal:condition="request/show/milestone" i18n:translate="">Milestone</th>
+    <th tal:condition="request/show/status"    i18n:translate="">Status</th>
+    <th tal:condition="request/show/resolution" i18n:translate="">Resolution</th>
+    <th tal:condition="request/show/creator" i18n:translate="">Creator</th>
+@@ -67,6 +68,8 @@
+        tal:content="python:i.components.plain() or default">&nbsp;</td>
+    <td tal:condition="request/show/versions"
+        tal:content="python:i.versions.plain() or default">&nbsp;</td>
++   <td tal:condition="request/show/milestone"
++       tal:content="python:i.milestone.plain() or default">&nbsp;</td>
+    <td tal:condition="request/show/status"
+        tal:content="python:i.status.plain() or default">&nbsp;</td>
+    <td tal:condition="request/show/resolution"
+diff -r bbee7515875a html/issue.item.html
+--- a/html/issue.item.html	Thu Sep 28 03:56:57 2017 +0300
++++ b/html/issue.item.html	Fri Dec 21 17:26:56 2018 +0100
+@@ -78,6 +78,17 @@
+  </th>
+  <td tal:content="structure context/versions/menu">versions</td>
+ </tr>
++
++<tr>
++ <th>
++ </th>
++ <td></td>
++ <th i18n:translate="">
++   <span tal:replace="structure python:db.milestone.classhelp('id,name,description',label='Milestone')" />:
++ </th>
++ <td tal:content="structure context/milestone/menu">milestone</td>
++</tr>
++
+ </table>
+ </fieldset>
+ 
+diff -r bbee7515875a html/issue.search.html
+--- a/html/issue.search.html	Thu Sep 28 03:56:57 2017 +0300
++++ b/html/issue.search.html	Fri Dec 21 17:26:56 2018 +0100
+@@ -148,6 +148,19 @@
+   <td metal:use-macro="group_input"></td>
+ </tr>
+ 
++<tr tal:define="name string:milestone;
++                db_klass string:milestone;
++                db_content string:name;">
++  <th i18n:translate="">Milestone:</th>
++  <td metal:use-macro="search_select_translated">
++    <option metal:fill-slot="extra_options" value="-1" i18n:translate=""
++            tal:attributes="selected python:value == '-1'">not selected</option>
++  </td>
++  <td metal:use-macro="column_input"></td>
++  <td metal:use-macro="sort_input"></td>
++  <td metal:use-macro="group_input"></td>
++</tr>
++
+ <tr tal:define="name string:severity;
+                 db_klass string:severity;
+                 db_content string:name;">
+diff -r bbee7515875a schema.py
+--- a/schema.py	Thu Sep 28 03:56:57 2017 +0300
++++ b/schema.py	Fri Dec 21 17:26:56 2018 +0100
+@@ -30,6 +30,13 @@
+                 order=Number())
+ version.setkey('name')
+ 
++# Milestone
++milestone = Class(db, 'milestone',
++                name=String(),
++                description=String(),
++                order=Number())
++version.setkey('name')
++
+ # Severity
+ severity = Class(db, 'severity',
+                  name=String(),
+@@ -126,7 +133,9 @@
+                    status=Link('status'),
+                    resolution=Link('resolution'),
+                    superseder=Link('issue'),
+-                   keywords=Multilink("keyword"))
++                   keywords=Multilink("keyword"),
++                   milestone=Link('milestone'),
++                   )
+ 
+ #
+ # TRACKER SECURITY SETTINGS
+@@ -154,7 +163,7 @@
+ 
+ for cl in ('issue_type', 'severity', 'component',
+            'version', 'priority', 'status', 'resolution',
+-           'issue', 'keyword'):
++           'issue', 'keyword', 'milestone'):
+     db.security.addPermissionToRole('User', 'View', cl)
+     db.security.addPermissionToRole('Anonymous', 'View', cl)
+ 
+@@ -219,7 +228,7 @@
+ p = db.security.addPermission(name='Create', klass='issue',
+                               properties=('title', 'type',
+                                           'components', 'versions',
+-                                          'severity',
++                                          'severity', 'milestone',
+                                           'messages', 'files', 'nosy'),
+                               description='User can report and discuss issues')
+ db.security.addPermissionToRole('User', p)
+@@ -227,7 +236,7 @@
+ p = db.security.addPermission(name='Edit', klass='issue',
+                               properties=('title', 'type',
+                                           'components', 'versions',
+-                                          'severity',
++                                          'severity', 'milestone',
+                                           'messages', 'files', 'nosy'),
+                               description='User can report and discuss issues')
+ db.security.addPermissionToRole('User', p)
+@@ -241,7 +250,7 @@
+ ##########################
+ for cl in ('issue_type', 'severity', 'component',
+            'version', 'priority', 'status', 'resolution',
+-           'issue', 'file', 'msg', 'keyword'):
++           'issue', 'file', 'msg', 'keyword', 'milestone'):
+     db.security.addPermissionToRole('Developer', 'View', cl)
+ 
+ for cl in ('issue', 'file', 'msg', 'keyword'):
+@@ -252,7 +261,7 @@
+ ##########################
+ # Coordinator permissions
+ ##########################
+-for cl in ('issue_type', 'severity', 'component',
++for cl in ('issue_type', 'severity', 'component', 'milestone',
+            'version', 'priority', 'status', 'resolution', 'issue', 'file', 'msg'):
+     db.security.addPermissionToRole('Coordinator', 'View', cl)
+     db.security.addPermissionToRole('Coordinator', 'Edit', cl)
+
